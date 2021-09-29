@@ -1,0 +1,15 @@
+{
+  "users": {
+    "sami": {
+      "name": "sami"
+    }
+  },
+  "messages": {
+    "m1": {
+      "author": "sami",
+      "content": "hello everybody",
+      "createdTimestamp": 0,
+      "editedTimestamp": 0
+    }
+  }
+}
