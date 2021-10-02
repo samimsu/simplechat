@@ -5,10 +5,7 @@ import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 import { firebaseConfig } from "./config.json";
 import MessagesContainer from "./components/MessagesContainer";
 
-// Initialize Firebase
-// const app = initializeApp(firebaseConfig);
 initializeApp(firebaseConfig);
-// console.log(app);
 
 const database = getDatabase();
 
