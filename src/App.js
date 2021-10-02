@@ -3,6 +3,7 @@ import "./App.css";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 import { firebaseConfig } from "./config.json";
+import MessagesContainer from "./components/MessagesContainer";
 
 // Initialize Firebase
 // const app = initializeApp(firebaseConfig);
@@ -25,7 +26,7 @@ function deleteMessageData(messageId) {
 }
 
 function App() {
-  const [username, setUsername] = useState("anon");
+  // const [username, setUsername] = useState("anon");
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
@@ -46,13 +47,13 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const changeUsername = (event) => {
-    event.preventDefault();
-  };
+  // const changeUsername = (event) => {
+  //   event.preventDefault();
+  // };
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
+  // const handleUsernameChange = (event) => {
+  //   setUsername(event.target.value);
+  // };
 
   const addMessage = (event) => {
     console.log("event", event);
@@ -63,7 +64,8 @@ function App() {
     const timestamp = Date.now();
     const messageData = {
       id: timestamp,
-      author: username,
+      // author: username,
+      author: "anon",
       content: message,
       createdTimestamp: timestamp,
     };
@@ -92,7 +94,7 @@ function App() {
       <header className="App-header">
         <h1 className="title">SimpleChat</h1>
         <div>
-          <div className="username">
+          {/* <div className="username">
             <p className="username-label">Username:</p>
             <form onSubmit={changeUsername}>
               <input
@@ -101,33 +103,12 @@ function App() {
                 onChange={handleUsernameChange}
               ></input>
             </form>
-          </div>
-          <div className="messages-container">
-            {messages.map((msg, index) => {
-              return (
-                <div key={index} className="message-container">
-                  <p className="message-username">{msg.author}</p>
-                  <div className="message">
-                    <p className="message-text">{msg.content}</p>
-                    <div className="buttons">
-                      <button
-                        className="btn-edit"
-                        onClick={() => handleMsgEdit(msg)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleMsgDelete(msg.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          </div> */}
+          <MessagesContainer
+            messages={messages}
+            handleMsgEdit={handleMsgEdit}
+            handleMsgDelete={handleMsgDelete}
+          />
           <form onSubmit={addMessage}>
             <input
               className="message-input"
