@@ -6,7 +6,7 @@ const MessagesContainer = ({ messages, handleMsgEdit, handleMsgDelete }) => {
       {messages.map((msg, index) => {
         return (
           <MessageContainer
-            index={index}
+            key={index}
             msg={msg}
             handleMsgEdit={handleMsgEdit}
             handleMsgDelete={handleMsgDelete}

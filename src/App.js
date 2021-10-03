@@ -1,26 +1,27 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, onValue, remove } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 import { firebaseConfig } from "./config.json";
 import MessagesContainer from "./components/MessagesContainer";
+import { writeMessageData, deleteMessageData } from "./dbFunctions";
 
 initializeApp(firebaseConfig);
 
 const database = getDatabase();
 
-function writeMessageData(message) {
-  set(ref(database, "messages/" + message.id), {
-    id: message.id,
-    author: message.author,
-    content: message.content,
-    createdTimestamp: message.createdTimestamp,
-  });
-}
+// function writeMessageData(message) {
+//   set(ref(database, "messages/" + message.id), {
+//     id: message.id,
+//     author: message.author,
+//     content: message.content,
+//     createdTimestamp: message.createdTimestamp,
+//   });
+// }
 
-function deleteMessageData(messageId) {
-  remove(ref(database, "messages/" + messageId));
-}
+// function deleteMessageData(messageId) {
+//   remove(ref(database, "messages/" + messageId));
+// }
 
 function App() {
   // const [username, setUsername] = useState("anon");
@@ -69,7 +70,7 @@ function App() {
     setMessages(messages.concat(messageData));
     setNewMessage("");
     console.log(messageData);
-    writeMessageData(messageData);
+    writeMessageData(messageData, database);
   };
 
   const handleMessageChange = (event) => {
@@ -83,13 +84,15 @@ function App() {
   const handleMsgDelete = (msgId) => {
     console.log(msgId);
     setMessages(messages.filter((msg) => msg.id !== msgId));
-    deleteMessageData(msgId);
+    deleteMessageData(msgId, database);
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1 className="title">SimpleChat</h1>
+        <div className="title">
+          <h1>SimpleChat</h1>
+        </div>
         <div>
           {/* <div className="username">
             <p className="username-label">Username:</p>
@@ -106,14 +109,15 @@ function App() {
             handleMsgEdit={handleMsgEdit}
             handleMsgDelete={handleMsgDelete}
           />
-          <form onSubmit={addMessage}>
-            <input
-              className="message-input"
-              placeholder="Send message"
-              onChange={handleMessageChange}
-              value={newMessage}
-            ></input>
-          </form>
+          <div className="message-input">
+            <form onSubmit={addMessage}>
+              <input
+                placeholder="Send message"
+                onChange={handleMessageChange}
+                value={newMessage}
+              ></input>
+            </form>
+          </div>
         </div>
       </header>
     </div>

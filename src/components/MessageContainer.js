@@ -1,7 +1,9 @@
-const MessageContainer = ({ index, msg, handleMsgEdit, handleMsgDelete }) => {
+const MessageContainer = ({ msg, handleMsgEdit, handleMsgDelete }) => {
   return (
-    <div key={index} className="message-container">
-      {/* <p className="message-username">{msg.author}</p> */}
+    <div className="message-container">
+      <p className="message-username">
+        <strong>{msg.author}</strong>
+      </p>
       <div className="message">
         <p className="message-text">{msg.content}</p>
         <div className="buttons">
