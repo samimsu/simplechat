@@ -12,5 +12,3 @@ export function writeMessageData(message, database) {
 export function deleteMessageData(messageId, database) {
   remove(ref(database, "messages/" + messageId));
 }
-
-// exports = { writeMessageData, deleteMessageData };
