@@ -26,6 +26,7 @@
 .username {
   display: flex;
   align-items: baseline;
+  width: 90vw;
   margin: 0.5vh;
   padding: 0 1vh;
   align-self: flex-start;
@@ -38,9 +39,9 @@
 }
 
 .username-input {
+  width: 200px;
   margin: 0.5vh;
   background-color: #282c34;
-  min-width: 2vw;
   padding: 1.5vh;
   border: 0;
   font-size: 20px;
@@ -128,7 +129,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: red; */
 }
 
 .message-input input {

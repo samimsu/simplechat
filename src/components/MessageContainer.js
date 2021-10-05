@@ -1,4 +1,7 @@
+import { getAuth } from "firebase/auth";
+
 const MessageContainer = ({ msg, handleMsgEdit, handleMsgDelete }) => {
+  const auth = getAuth();
   return (
     <div className="message-container">
       <p className="message-username">
@@ -10,12 +13,16 @@ const MessageContainer = ({ msg, handleMsgEdit, handleMsgDelete }) => {
           <button className="btn-edit" onClick={() => handleMsgEdit(msg)}>
             Edit
           </button>
-          <button
-            className="btn-delete"
-            onClick={() => handleMsgDelete(msg.id)}
-          >
-            Delete
-          </button>
+          {auth.currentUser.uid === msg.authorId ? (
+            <button
+              className="btn-delete"
+              onClick={() => handleMsgDelete(msg.id)}
+            >
+              Delete
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from "./config.json";
 import MessagesContainer from "./components/MessagesContainer";
 import { writeMessageData, deleteMessageData } from "./dbFunctions";
@@ -10,51 +11,66 @@ initializeApp(firebaseConfig);
 
 const database = getDatabase();
 
-// function writeMessageData(message) {
-//   set(ref(database, "messages/" + message.id), {
-//     id: message.id,
-//     author: message.author,
-//     content: message.content,
-//     createdTimestamp: message.createdTimestamp,
-//   });
-// }
+const auth = getAuth();
+signInAnonymously(auth)
+  .then((res) => {
+    console.log("signed in...", res);
+    console.log("auth", auth.currentUser.uid);
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.log(errorCode, errorMessage);
+  });
 
-// function deleteMessageData(messageId) {
-//   remove(ref(database, "messages/" + messageId));
-// }
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log(`${user.uid} is signed in`);
+  } else {
+    console.log("user is signed out");
+  }
+});
 
 function App() {
-  // const [username, setUsername] = useState("anon");
+  const [username, setUsername] = useState("anon");
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [authorId, setAuthorId] = useState(null);
 
   useEffect(() => {
-    const dataRef = ref(database, "messages/");
-    onValue(dataRef, (snapshot) => {
+    const messagesRef = ref(database, "messages/");
+    onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
-      console.log("messages data", data);
+      if (!data) return;
       const messageIds = Object.keys(data);
-      console.log(messageIds);
       const msgs = [];
       messageIds.forEach((messageId) => {
         msgs.push(data[messageId]);
       });
       setMessages(messages.concat(msgs));
-      console.log("messages", messages);
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User:", JSON.stringify(user, null, 2));
+        console.log(Object.keys(user));
+        console.log(user.displayName);
+        const uid = user.uid;
+        setAuthorId(uid);
+      } else {
+        console.log("user is signed out");
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const changeUsername = (event) => {
-  //   event.preventDefault();
-  // };
-
-  // const handleUsernameChange = (event) => {
-  //   setUsername(event.target.value);
-  // };
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
 
   const addMessage = (event) => {
     console.log("event", event);
+    console.log(database);
     event.preventDefault();
     const message = newMessage;
     if (!message) return;
@@ -62,14 +78,13 @@ function App() {
     const timestamp = Date.now();
     const messageData = {
       id: timestamp,
-      // author: username,
-      author: "anon",
+      author: username,
+      authorId: authorId,
       content: message,
       createdTimestamp: timestamp,
     };
     setMessages(messages.concat(messageData));
     setNewMessage("");
-    console.log(messageData);
     writeMessageData(messageData, database);
   };
 
@@ -94,16 +109,14 @@ function App() {
           <h1>SimpleChat</h1>
         </div>
         <div>
-          {/* <div className="username">
+          <div className="username">
             <p className="username-label">Username:</p>
-            <form onSubmit={changeUsername}>
-              <input
-                className="username-input"
-                value={username}
-                onChange={handleUsernameChange}
-              ></input>
-            </form>
-          </div> */}
+            <input
+              className="username-input"
+              value={username}
+              onChange={handleUsernameChange}
+            ></input>
+          </div>
           <MessagesContainer
             messages={messages}
             handleMsgEdit={handleMsgEdit}
