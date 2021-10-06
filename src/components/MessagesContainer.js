@@ -1,8 +1,15 @@
 import MessageContainer from "./MessageContainer";
+import loadingIcon from "../assets/loading.svg";
 
-const MessagesContainer = ({ messages, handleMsgEdit, handleMsgDelete }) => {
+const MessagesContainer = ({
+  messages,
+  handleMsgEdit,
+  handleMsgDelete,
+  isLoading,
+}) => {
   return (
     <div id="msgs-container" className="messages-container">
+      {isLoading ? <img src={loadingIcon} alt="loading icon" /> : ""}
       {messages.map((msg, index) => {
         let showUsername = true;
         if (

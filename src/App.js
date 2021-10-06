@@ -36,6 +36,7 @@ function App() {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [authorId, setAuthorId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const messagesRef = ref(database, "messages/");
@@ -50,6 +51,7 @@ function App() {
       setMessages(messages.concat(msgs));
       const messagesContainer = document.getElementById("msgs-container");
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      setIsLoading(false);
     });
 
     onAuthStateChanged(auth, (user) => {
@@ -122,6 +124,7 @@ function App() {
             messages={messages}
             handleMsgEdit={handleMsgEdit}
             handleMsgDelete={handleMsgDelete}
+            isLoading={isLoading}
           />
           <div className="message-input">
             <form className="message-form" onSubmit={addMessage}>
