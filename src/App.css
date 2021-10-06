@@ -23,6 +23,10 @@
   margin: 0.5vh;
 }
 
+.title h1 {
+  margin: 0;
+}
+
 .username {
   display: flex;
   align-items: baseline;
