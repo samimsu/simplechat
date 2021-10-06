@@ -1,12 +1,21 @@
 import { getAuth } from "firebase/auth";
 
-const MessageContainer = ({ msg, handleMsgEdit, handleMsgDelete }) => {
+const MessageContainer = ({
+  msg,
+  showUsername,
+  handleMsgEdit,
+  handleMsgDelete,
+}) => {
   const auth = getAuth();
   return (
     <div className="message-container">
-      <p className="message-username">
-        <strong>{msg.author}</strong>
-      </p>
+      {showUsername ? (
+        <p className="message-username">
+          <strong>{msg.author}</strong>
+        </p>
+      ) : (
+        ""
+      )}
       <div className="message">
         <p className="message-text">{msg.content}</p>
         <div className="buttons">
