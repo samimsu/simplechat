@@ -3,19 +3,19 @@ import "./App.css";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
-import { firebaseConfig } from "./config.json";
+// import { firebaseConfig } from "./config.json";
 import MessagesContainer from "./components/MessagesContainer";
 import { writeMessageData, deleteMessageData } from "./dbFunctions";
 
+const firebaseConfig = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
 initializeApp(firebaseConfig);
 
 const database = getDatabase();
 
 const auth = getAuth();
 signInAnonymously(auth)
-  .then((res) => {
-    console.log("signed in...", res);
-    console.log("auth", auth.currentUser.uid);
+  .then(() => {
+    console.log("signed in...");
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -52,9 +52,6 @@ function App() {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("User:", JSON.stringify(user, null, 2));
-        console.log(Object.keys(user));
-        console.log(user.displayName);
         const uid = user.uid;
         setAuthorId(uid);
       } else {
@@ -69,8 +66,6 @@ function App() {
   };
 
   const addMessage = (event) => {
-    console.log("event", event);
-    console.log(database);
     event.preventDefault();
     const message = newMessage;
     if (!message) return;
@@ -97,7 +92,6 @@ function App() {
   };
 
   const handleMsgDelete = (msgId) => {
-    console.log(msgId);
     setMessages(messages.filter((msg) => msg.id !== msgId));
     deleteMessageData(msgId, database);
   };
