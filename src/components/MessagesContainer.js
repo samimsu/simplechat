@@ -2,7 +2,7 @@ import MessageContainer from "./MessageContainer";
 
 const MessagesContainer = ({ messages, handleMsgEdit, handleMsgDelete }) => {
   return (
-    <div className="messages-container">
+    <div id="msgs-container" className="messages-container">
       {messages.map((msg, index) => {
         let showUsername = true;
         if (

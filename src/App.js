@@ -48,6 +48,8 @@ function App() {
         msgs.push(data[messageId]);
       });
       setMessages(messages.concat(msgs));
+      const messagesContainer = document.getElementById("msgs-container");
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
 
     onAuthStateChanged(auth, (user) => {
@@ -60,6 +62,11 @@ function App() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const messagesContainer = document.getElementById("msgs-container");
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }, [messages]);
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
