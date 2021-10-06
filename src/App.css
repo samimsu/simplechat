@@ -135,10 +135,15 @@
   align-items: center;
 }
 
-.message-input input {
+.message-form {
+  display: flex;
   margin-top: 0.5vh;
+  min-width: 95vw;
+}
+
+.message-input input {
   background-color: #343941;
-  min-width: 90vw;
+  width: 100%;
   padding: 1.5vh;
   border: 0;
   font-size: 20px;
@@ -146,8 +151,13 @@
   caret-color: white;
 }
 
-.message-input:focus {
+.message-input input:focus {
   outline: none;
+}
+
+.send-btn {
+  background-color: #61dafb;
+  border: 0;
 }
 
 /* width */

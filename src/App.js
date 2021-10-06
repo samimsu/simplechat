@@ -123,12 +123,15 @@ function App() {
             handleMsgDelete={handleMsgDelete}
           />
           <div className="message-input">
-            <form onSubmit={addMessage}>
+            <form className="message-form" onSubmit={addMessage}>
               <input
                 placeholder="Send message"
                 onChange={handleMessageChange}
                 value={newMessage}
               ></input>
+              <button className="send-btn" type="submit">
+                Send
+              </button>
             </form>
           </div>
         </div>
