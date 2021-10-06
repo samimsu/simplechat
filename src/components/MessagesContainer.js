@@ -5,7 +5,11 @@ const MessagesContainer = ({ messages, handleMsgEdit, handleMsgDelete }) => {
     <div className="messages-container">
       {messages.map((msg, index) => {
         let showUsername = true;
-        if (index > 0 && msg.authorId === messages[index - 1].authorId) {
+        if (
+          index > 0 &&
+          msg.authorId === messages[index - 1].authorId &&
+          msg.author === messages[index - 1].author
+        ) {
           showUsername = false;
         }
         return (
