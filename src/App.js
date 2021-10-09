@@ -14,25 +14,6 @@ initializeApp(firebaseConfig);
 
 const database = getDatabase();
 
-const auth = getAuth();
-signInAnonymously(auth)
-  .then(() => {
-    console.log("signed in...");
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(errorCode, errorMessage);
-  });
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log(`${user.uid} is signed in`);
-  } else {
-    console.log("user is signed out");
-  }
-});
-
 function App() {
   const [username, setUsername] = useState("anon");
   const [newMessage, setNewMessage] = useState("");
@@ -41,6 +22,25 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const auth = getAuth();
+    signInAnonymously(auth)
+      .then(() => {
+        console.log("signed in...");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(`${user.uid} is signed in`);
+      } else {
+        console.log("user is signed out");
+      }
+    });
+
     const messagesRef = ref(database, "messages/");
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
