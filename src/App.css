@@ -19,12 +19,16 @@
 
 .title {
   min-height: 5vh;
-  color: #61dafb;
   margin: 0.5vh;
 }
 
 .title h1 {
   margin: 0;
+}
+
+.title a, .title a:visited {
+  text-decoration: none;
+  color: #61dafb;
 }
 
 .username {
