@@ -78,7 +78,7 @@ function App() {
 
   const addMessage = (event) => {
     event.preventDefault();
-    const message = newMessage;
+    const message = newMessage.trim();
     if (!message) return;
 
     const timestamp = Date.now();
