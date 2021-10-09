@@ -3,8 +3,10 @@ import "./App.css";
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
-// import { firebaseConfig } from "./config.json";
+import Title from "./components/Title";
+import Username from "./components/Username";
 import MessagesContainer from "./components/MessagesContainer";
+import MessageInput from "./components/MessageInput";
 import { writeMessageData, deleteMessageData } from "./dbFunctions";
 
 const firebaseConfig = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
@@ -108,36 +110,23 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="title">
-          <h1>SimpleChat</h1>
-        </div>
+        <Title />
         <div>
-          <div className="username">
-            <p className="username-label">Username:</p>
-            <input
-              className="username-input"
-              value={username}
-              onChange={handleUsernameChange}
-            ></input>
-          </div>
+          <Username
+            username={username}
+            handleUsernameChange={handleUsernameChange}
+          />
           <MessagesContainer
             messages={messages}
             handleMsgEdit={handleMsgEdit}
             handleMsgDelete={handleMsgDelete}
             isLoading={isLoading}
           />
-          <div className="message-input">
-            <form className="message-form" onSubmit={addMessage}>
-              <input
-                placeholder="Send message"
-                onChange={handleMessageChange}
-                value={newMessage}
-              ></input>
-              <button className="send-btn" type="submit">
-                Send
-              </button>
-            </form>
-          </div>
+          <MessageInput
+            addMessage={addMessage}
+            handleMessageChange={handleMessageChange}
+            newMessage={newMessage}
+          />
         </div>
       </header>
     </div>
