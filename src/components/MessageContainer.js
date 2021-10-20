@@ -22,7 +22,7 @@ const MessageContainer = ({
           <button className="btn-edit" onClick={() => handleMsgEdit(msg)}>
             Edit
           </button>
-          {auth.currentUser.uid === msg.authorId ? (
+          {auth.currentUser && auth.currentUser.uid === msg.authorId ? (
             <button
               className="btn-delete"
               onClick={() => handleMsgDelete(msg.id)}
