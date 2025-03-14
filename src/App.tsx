@@ -8,8 +8,9 @@ import Username from "./components/Username";
 import MessagesContainer from "./components/MessagesContainer";
 import MessageInput from "./components/MessageInput";
 import { writeMessageData, deleteMessageData } from "./dbFunctions";
+import type { Message } from "./utils/types";
 
-const firebaseConfig = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
+const firebaseConfig = JSON.parse(import.meta.env.VITE_FIREBASE_CONFIG);
 initializeApp(firebaseConfig);
 
 const database = getDatabase();
@@ -17,8 +18,8 @@ const database = getDatabase();
 function App() {
   const [username, setUsername] = useState("anon");
   const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [authorId, setAuthorId] = useState(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [authorId, setAuthorId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -44,15 +45,18 @@ function App() {
     const messagesRef = ref(database, "messages/");
     onValue(messagesRef, (snapshot) => {
       const data = snapshot.val();
+      console.log("data", data);
       if (!data) return;
       const messageIds = Object.keys(data);
-      const msgs = [];
+      const msgs: Message[] = [];
       messageIds.forEach((messageId) => {
         msgs.push(data[messageId]);
       });
       setMessages(messages.concat(msgs));
       const messagesContainer = document.getElementById("msgs-container");
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      if (messagesContainer) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
       setIsLoading(false);
     });
 
@@ -69,14 +73,16 @@ function App() {
 
   useEffect(() => {
     const messagesContainer = document.getElementById("msgs-container");
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
   }, [messages]);
 
-  const handleUsernameChange = (event) => {
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
 
-  const addMessage = (event) => {
+  const addMessage = (event: React.FormEvent) => {
     event.preventDefault();
     const message = newMessage.trim();
     if (!message) return;
@@ -94,15 +100,15 @@ function App() {
     writeMessageData(messageData, database);
   };
 
-  const handleMessageChange = (event) => {
+  const handleMessageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewMessage(event.target.value);
   };
 
-  const handleMsgEdit = (msg) => {
+  const handleMsgEdit = (msg: Message) => {
     setNewMessage(msg.content);
   };
 
-  const handleMsgDelete = (msgId) => {
+  const handleMsgDelete = (msgId: number) => {
     setMessages(messages.filter((msg) => msg.id !== msgId));
     deleteMessageData(msgId, database);
   };
